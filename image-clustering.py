@@ -3,6 +3,9 @@ import xmltodict
 from sklearn.cluster import KMeans
 from sklearn.feature_extraction.text import TfidfVectorizer
 import shutil
+from image_encoder import Autoencoder, transform_image
+import joblib
+import torch
 
 
 def get_image_data(file_path):
@@ -15,17 +18,26 @@ def get_image_data(file_path):
 if __name__ == '__main__':
     image_data = get_image_data(os.path.join(os.getcwd(), "data", "data_description.xml"))
 
-    all_descriptions = []
+    transformed_images = []
     for image in image_data:
         if image["description"] is not None:
-            all_descriptions.append(image["description"])
+            image_name = image["mediaurl"].replace("/images/", "")
+            original_path = os.path.join(os.getcwd(), "data", "original_images", image_name)
 
-    vectoriser = TfidfVectorizer()
-    transformed = vectoriser.fit_transform(all_descriptions)
+            if os.path.exists(original_path):
+                transformed_images.append(transform_image(original_path))
+
+    # (num_images, 13225)
+    transformed_images = torch.stack(transformed_images)
+
+    model = joblib.load(os.path.join(os.getcwd(), "autoencoder.pt"))
+    model.eval()
+
+    outputs = model(transformed_images).detach().numpy()
 
     NUM_CLUSTERS = 6
-    clustering_model = KMeans(n_clusters=NUM_CLUSTERS, algorithm="auto", max_iter=1000, n_init=500)
-    clustering_model.fit(transformed)
+    clustering_model = KMeans(n_clusters=NUM_CLUSTERS, algorithm="auto", max_iter=500, n_init=50)
+    predictions = clustering_model.fit_transform(outputs)
 
     # Reset clusters
     cluster_dir = os.path.join(os.getcwd(), "data", "clusters")
@@ -35,6 +47,7 @@ if __name__ == '__main__':
     os.mkdir(cluster_dir)
 
     num_in = [0 for _ in range(NUM_CLUSTERS)]
+    found = 0
     for image in image_data:
         if image["description"] is not None:
 
@@ -43,7 +56,10 @@ if __name__ == '__main__':
             if not os.path.exists(original_path):
                 continue
 
-            cluster = clustering_model.predict(vectoriser.transform([image["description"]]))[0]
+            image_transformed = predictions[found].reshape(1, -1)
+            found += 1
+
+            cluster = clustering_model.predict(image_transformed)[0]
             num_in[cluster] += 1
 
             if num_in[cluster] == 1:

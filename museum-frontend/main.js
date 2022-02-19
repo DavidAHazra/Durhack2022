@@ -71,16 +71,24 @@ function init() {
       fontSigns.push(new THREE.Mesh(fontSignGeometries[i], fontMaterial))
       fontSigns[i].rotateY(Math.PI/2 + i * Math.PI/3)
       fontSigns[i].translateZ(-8.66026)
-      console.log(fontSigns[i])
       fontSigns[i].translateX(-2)
       fontSigns[i].position.y = 5
       scene.add(fontSigns[i])
     }
   })
+  loader.load("resources/models/Room.glb", function (gltf) {
+    var rooms = []
+    for(var i = 0; i < 6; i++){
+      rooms.push(gltf.scene.clone());
+      rooms[i].rotateY(Math.PI/2 + i * Math.PI/3)
+      rooms[i].translateZ(-8.66026-10)
+      scene.add(rooms[i])
+    }
+  })
   let paintings = []
   for (var i = 0; i < 6; i++){
     paintings.push([])
-    for (var j = 0; j < 5; j++){
+    for (var j = 0; j < 3; j++){
       paintings[i].push(new THREE.Mesh(new THREE.BoxGeometry(), new THREE.MeshBasicMaterial()))
       paintings[i][2*j].rotateY(Math.PI/2 + i * Math.PI/3)
       paintings[i][2*j].translateZ(-10.66026 - 3 * j)

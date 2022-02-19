@@ -1,14 +1,14 @@
 import './style.css'
 import * as THREE from "three"
 import { PointerLockControls } from "three/examples/jsm/controls/PointerLockControls"
-import { HDRCubeTextureLoader } from "three/examples/jsm/loaders/HDRCubeTextureLoader"
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
 
 const renderer = new THREE.WebGLRenderer({
 })
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xffffff)
 const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.y = 10;
+camera.position.y = 1.6;
 const controls = new PointerLockControls(camera, document.body)
 let moveForward = false;
 let moveBackward = false;
@@ -18,6 +18,7 @@ let canJump = false;
 const velocity = new THREE.Vector3();
 const direction = new THREE.Vector3();
 const clock = new THREE.Clock();
+const loader = new GLTFLoader();
 let skybox;
 function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
@@ -33,11 +34,28 @@ function init() {
   var skyboxMaterial = new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("resources/SkyHDR.jpg")})
   skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial)
   scene.add(skybox)
-  const testfloorgeometry = new THREE.PlaneGeometry(100, 100);
-  testfloorgeometry.rotateX(-Math.PI/2)
-  const floormaterial = new THREE.MeshBasicMaterial({color: 0x222222, side: THREE.DoubleSide})
-  const testfloor = new THREE.Mesh(testfloorgeometry, floormaterial)
-  scene.add(testfloor)
+  scene.add(new THREE.AmbientLight(0xffffff, 0.1))
+  const sun = new THREE.DirectionalLight(0xffffff)
+  scene.add(sun)
+  loader.load("resources/models/EntranceHall.glb", function (gltf) {
+    const entranceHallObject = gltf.scene;
+    scene.add(entranceHallObject)
+  })
+  loader.load("resources/models/Corridor.glb", function (gltf) {
+    var corridorObjects = []
+    for(var i = 0; i < 6; i++){
+      corridorObjects.push(gltf.scene.clone())
+      corridorObjects[i].scale.x = 1.01
+      corridorObjects[i].scale.y = 1.01
+      corridorObjects[i].rotateY(Math.PI/2 + i * Math.PI/3)
+      corridorObjects[i].translateZ(-8.66026)
+      scene.add(corridorObjects[i])
+    }
+    // const corridorObject = gltf.scene;
+    // corridorObject.rotateY(Math.PI/2)
+    // corridorObject.translateZ(-8.66026)
+    // scene.add(corridorObject)
+  })
   const blocker = document.getElementById("blocker");
   const instructions = document.getElementById("instructions");
   instructions.addEventListener("click", function () {
@@ -111,8 +129,8 @@ function animate(){
     direction.z = Number(moveForward) - Number(moveBackward)
     direction.x = Number(moveRight) - Number(moveLeft)
     direction.normalize();
-    if ( moveForward || moveBackward ) velocity.z -= direction.z * 400.0 * delta;
-    if ( moveLeft || moveRight ) velocity.x -= direction.x * 400.0 * delta;
+    if ( moveForward || moveBackward ) velocity.z -= direction.z * 100.0 * delta;
+    if ( moveLeft || moveRight ) velocity.x -= direction.x * 100.0 * delta;
     controls.moveRight(-velocity.x * delta);
     controls.moveForward(-velocity.z * delta);
   }

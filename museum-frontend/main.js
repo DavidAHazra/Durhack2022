@@ -9,7 +9,7 @@ const renderer = new THREE.WebGLRenderer({
 })
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xffffff)
-const camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.1, 80);
 camera.position.y = 1.6;
 const controls = new PointerLockControls(camera, document.body)
 let moveForward = false;
@@ -30,7 +30,7 @@ function onWindowResize() {
 function init() {
   onWindowResize();
   window.addEventListener("resize", onWindowResize);
-  scene.fog = new THREE.Fog(0xffffff, 0, 750)
+  scene.fog = new THREE.Fog(0xffffff, 0, 60)
   const skyboxGeometry = new THREE.SphereGeometry( 500, 60, 40 );
   skyboxGeometry.scale( - 1, 1, 1 );
   var skyboxMaterial = new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("resources/SkyHDR.jpg", function (hdr){
@@ -70,9 +70,10 @@ function init() {
   fontLoader.load("resources/Roboto Condensed_Bold.json", function (font) {
     let fontSignGeometries = []
     let fontSigns = []
-    const fontMaterial = new THREE.MeshBasicMaterial({color: 0xff0000})
+    let signTexts = ["Buildings", "Children", "Events", "Portraits", "Scenery", "Society"]
+    const fontMaterial = new THREE.MeshBasicMaterial({color: 0xDDDDDD})
     for(var i = 0; i < 6; i++){
-      fontSignGeometries.push(new TextGeometry("Test object " + String(i), {
+      fontSignGeometries.push(new TextGeometry(signTexts[i], {
         font: font,
         size: 0.5,
         height: 0.1
@@ -80,7 +81,7 @@ function init() {
       fontSigns.push(new THREE.Mesh(fontSignGeometries[i], fontMaterial))
       fontSigns[i].rotateY(Math.PI/2 + i * Math.PI/3)
       fontSigns[i].translateZ(-8.66026)
-      fontSigns[i].translateX(-2)
+      fontSigns[i].translateX(-1)
       fontSigns[i].position.y = 5
       scene.add(fontSigns[i])
     }

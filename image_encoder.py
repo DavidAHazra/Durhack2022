@@ -77,6 +77,4 @@ if __name__ == '__main__':
 
         if mean_loss < best_loss:
             best_loss = mean_loss
-            joblib.dump(model, "autoencoder2.pt")
-
-    
+            joblib.dump(model, "autoencoder.pt")

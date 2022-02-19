@@ -33,11 +33,15 @@ function init() {
   scene.fog = new THREE.Fog(0xffffff, 0, 750)
   const skyboxGeometry = new THREE.SphereGeometry( 500, 60, 40 );
   skyboxGeometry.scale( - 1, 1, 1 );
-  var skyboxMaterial = new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("resources/SkyHDR.jpg")})
+  var skyboxMaterial = new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("resources/SkyHDR.jpg", function (hdr){
+    scene.environment = hdr
+  })})
   skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial)
   scene.add(skybox)
-  scene.add(new THREE.AmbientLight(0xffffff, 0.1))
-  const sun = new THREE.DirectionalLight(0xffffff)
+  scene.add(new THREE.AmbientLight(0xffffff, 0.5))
+  const sun = new THREE.PointLight(0xffffff, 0.5)
+  sun.position.y = 4
+  console.log(sun.rotation)
   scene.add(sun)
   loader.load("resources/models/EntranceHall.glb", function (gltf) {
     const entranceHallObject = gltf.scene;
@@ -45,8 +49,13 @@ function init() {
   })
   loader.load("resources/models/Corridor.glb", function (gltf) {
     var corridorObjects = []
+    var corridorLights = []
     for(var i = 0; i < 6; i++){
       corridorObjects.push(gltf.scene.clone())
+      corridorLights.push(new THREE.PointLight(0xffffff, 0.1))
+      corridorLights[i].translateZ(-5)
+      corridorLights[i].position.y = 3
+      corridorObjects[i].add(corridorLights[i])
       corridorObjects[i].scale.x = 1.01
       corridorObjects[i].scale.y = 1.01
       corridorObjects[i].rotateY(Math.PI/2 + i * Math.PI/3)
@@ -88,17 +97,17 @@ function init() {
   let paintings = []
   for (var i = 0; i < 6; i++){
     paintings.push([])
-    for (var j = 0; j < 3; j++){
+    for (var j = 0; j < 8; j++){
       paintings[i].push(new THREE.Mesh(new THREE.BoxGeometry(), new THREE.MeshBasicMaterial()))
       paintings[i][2*j].rotateY(Math.PI/2 + i * Math.PI/3)
-      paintings[i][2*j].translateZ(-10.66026 - 3 * j)
-      paintings[i][2*j].translateX(-2.5)
+      paintings[i][2*j].translateZ(-20.16026 - 3.1 * j)
+      paintings[i][2*j].translateX(-10.435823)
       paintings[i][2*j].position.y = 2
       scene.add(paintings[i][2*j])
       paintings[i].push(new THREE.Mesh(new THREE.BoxGeometry(), new THREE.MeshBasicMaterial()))
       paintings[i][2*j+1].rotateY(Math.PI/2 + i * Math.PI/3)
-      paintings[i][2*j+1].translateZ(-10.66026 - 3 * j)
-      paintings[i][2*j+1].translateX(2.5)
+      paintings[i][2*j+1].translateZ(-20.16026 - 3.1 * j)
+      paintings[i][2*j+1].translateX(10.435823)
       paintings[i][2*j+1].position.y = 2
       scene.add(paintings[i][2*j+1])
     }
@@ -136,6 +145,10 @@ function init() {
       case 'KeyD':
         moveRight = true;
         break;
+      case "Enter":
+        controls.getObject().position.x = 0;
+        controls.getObject().position.z = 0;
+        break
     }
   };
   const onKeyUp = function ( event ) {

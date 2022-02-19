@@ -1,9 +1,10 @@
 import torch.utils.data
 from torchvision.io import read_image
 import os
-from torchvision.transforms import Resize
-import joblib
+from torchvision.transforms import Resize, Normalize, ConvertImageDtype, Grayscale
 
+import joblib
+ 
 
 class ImageDataset(torch.utils.data.Dataset):
     def __init__(self, image_dir):
@@ -17,13 +18,16 @@ class ImageDataset(torch.utils.data.Dataset):
     def __getitem__(self, index):
         # Load image
         image_data = read_image(self.image_paths[index])
-
+        image_data = ConvertImageDtype(torch.float)(image_data)
+        image_data = Grayscale()(image_data)
+        image_data = Normalize(mean=[0.5],std=[0.5])(image_data)
         # Scale everything to 460x460
-        image_data = Resize((460, 460))(image_data)
-
+        image_data = Resize((115, 115))(image_data)
         # Flatten
+        #image_data = image_data.squeeze()
         image_data = image_data.flatten()
-        return image_data.float()
+
+        return image_data
 
 
 class Autoencoder(torch.nn.Module):
@@ -31,15 +35,13 @@ class Autoencoder(torch.nn.Module):
         super(Autoencoder, self).__init__()
 
         self.encoder = torch.nn.Sequential(
-            torch.nn.Linear(634800, 1024),
-            torch.nn.Linear(1024, 512),
-            torch.nn.Linear(512, 256)
+            torch.nn.Linear(13225, 512),
+            torch.nn.Linear(512, 256),
         )
 
         self.decoder = torch.nn.Sequential(
             torch.nn.Linear(256, 512),
-            torch.nn.Linear(512, 1024),
-            torch.nn.Linear(1024, 634800)
+            torch.nn.Linear(512, 13225)
         )
 
     def latent_encode(self, x):
@@ -55,7 +57,7 @@ if __name__ == '__main__':
 
     model = Autoencoder().float()
 
-    optimiser = torch.optim.SGD(model.parameters(), lr=0.01)
+    optimiser = torch.optim.AdamW(model.parameters(), lr=0.0001)
     loss_func = torch.nn.MSELoss()
 
     best_loss = float('inf')
@@ -65,9 +67,8 @@ if __name__ == '__main__':
             optimiser.zero_grad()
 
             reconstructed = model(batch)
-            loss = loss_func(batch, reconstructed)
+            loss = loss_func(reconstructed, batch)
             batch_losses.append(loss.item())
-
             loss.backward()
             optimiser.step()
 
@@ -76,4 +77,6 @@ if __name__ == '__main__':
 
         if mean_loss < best_loss:
             best_loss = mean_loss
-            joblib.dump(model, "autoencoder.pt")
+            joblib.dump(model, "autoencoder2.pt")
+
+    

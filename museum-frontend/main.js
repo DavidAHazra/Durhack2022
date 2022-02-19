@@ -70,7 +70,8 @@ function init() {
   fontLoader.load("resources/Roboto Condensed_Bold.json", function (font) {
     let fontSignGeometries = []
     let fontSigns = []
-    let signTexts = ["Buildings", "Children", "Events", "Portraits", "Scenery", "Society"]
+    let signTexts = ["Buildings", "Children", "Events", "Portraits", "Scenery", "Society"];
+    let roomsDeep = [69, 38, 58, 91, 56, 94];
     const fontMaterial = new THREE.MeshBasicMaterial({color: 0xDDDDDD})
     for(var i = 0; i < 6; i++){
       fontSignGeometries.push(new TextGeometry(signTexts[i], {
@@ -89,10 +90,13 @@ function init() {
   loader.load("resources/models/Room.glb", function (gltf) {
     var rooms = []
     for(var i = 0; i < 6; i++){
-      rooms.push(gltf.scene.clone());
-      rooms[i].rotateY(Math.PI/2 + i * Math.PI/3)
-      rooms[i].translateZ(-8.66026-10)
-      scene.add(rooms[i])
+      for (let j = 0; j < roomsDeep[i]; ++j) {
+        rooms.push(gltf.scene.clone());
+        rooms[i].rotateY(Math.PI/2 + i * Math.PI/3)
+        rooms[i].translateZ(-8.66026-10)
+        rooms[i].translateZ(-10 * j);
+        scene.add(rooms[i])  
+      }
     }
   })
   let paintings = []

@@ -2,23 +2,25 @@ import './style.css'
 import * as THREE from "three"
 import { PointerLockControls } from "three/examples/jsm/controls/PointerLockControls"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
+import { FontLoader } from 'three/examples/jsm/loaders/FontLoader'
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry'
 
 const renderer = new THREE.WebGLRenderer({
 })
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xffffff)
-const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.y = 1.6;
 const controls = new PointerLockControls(camera, document.body)
 let moveForward = false;
 let moveBackward = false;
 let moveLeft = false;
 let moveRight = false;
-let canJump = false;
 const velocity = new THREE.Vector3();
 const direction = new THREE.Vector3();
 const clock = new THREE.Clock();
 const loader = new GLTFLoader();
+const fontLoader = new FontLoader();
 let skybox;
 function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
@@ -56,6 +58,25 @@ function init() {
     // corridorObject.translateZ(-8.66026)
     // scene.add(corridorObject)
   })
+  fontLoader.load("resources/Roboto Condensed_Bold.json", function (font) {
+    let fontSignGeometries = []
+    let fontSigns = []
+    const fontMaterial = new THREE.MeshBasicMaterial({color: 0xff0000})
+    for(var i = 0; i < 6; i++){
+      fontSignGeometries.push(new TextGeometry("Test object " + String(i), {
+        font: font,
+        size: 0.5,
+        height: 0.1
+      }))
+      fontSigns.push(new THREE.Mesh(fontSignGeometries[i], fontMaterial))
+      fontSigns[i].rotateY(Math.PI/2 + i * Math.PI/3)
+      fontSigns[i].translateZ(-8.66026)
+      console.log(fontSigns[i])
+      fontSigns[i].translateX(-2)
+      fontSigns[i].position.y = 5
+      scene.add(fontSigns[i])
+    }
+  })
   const blocker = document.getElementById("blocker");
   const instructions = document.getElementById("instructions");
   instructions.addEventListener("click", function () {
@@ -79,6 +100,7 @@ function init() {
       case 'ArrowLeft':
       case 'KeyA':
         moveLeft = true;
+
         break;
       case 'ArrowDown':
       case 'KeyS':
@@ -87,10 +109,6 @@ function init() {
       case 'ArrowRight':
       case 'KeyD':
         moveRight = true;
-        break;
-      case 'Space':
-        if ( canJump === true ) velocity.y += 350;
-        canJump = false;
         break;
     }
   };

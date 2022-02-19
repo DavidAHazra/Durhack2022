@@ -77,6 +77,24 @@ function init() {
       scene.add(fontSigns[i])
     }
   })
+  let paintings = []
+  for (var i = 0; i < 6; i++){
+    paintings.push([])
+    for (var j = 0; j < 5; j++){
+      paintings[i].push(new THREE.Mesh(new THREE.BoxGeometry(), new THREE.MeshBasicMaterial()))
+      paintings[i][2*j].rotateY(Math.PI/2 + i * Math.PI/3)
+      paintings[i][2*j].translateZ(-10.66026 - 3 * j)
+      paintings[i][2*j].translateX(-2.5)
+      paintings[i][2*j].position.y = 2
+      scene.add(paintings[i][2*j])
+      paintings[i].push(new THREE.Mesh(new THREE.BoxGeometry(), new THREE.MeshBasicMaterial()))
+      paintings[i][2*j+1].rotateY(Math.PI/2 + i * Math.PI/3)
+      paintings[i][2*j+1].translateZ(-10.66026 - 3 * j)
+      paintings[i][2*j+1].translateX(2.5)
+      paintings[i][2*j+1].position.y = 2
+      scene.add(paintings[i][2*j+1])
+    }
+  }
   const blocker = document.getElementById("blocker");
   const instructions = document.getElementById("instructions");
   instructions.addEventListener("click", function () {

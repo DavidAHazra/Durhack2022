@@ -1,6 +1,8 @@
 import os
 import xmltodict
-from collections import defaultdict
+from sklearn.cluster import KMeans
+from sklearn.feature_extraction.text import TfidfVectorizer
+import shutil
 
 
 def get_image_data(file_path):
@@ -12,16 +14,46 @@ def get_image_data(file_path):
 
 if __name__ == '__main__':
     image_data = get_image_data(os.path.join(os.getcwd(), "data", "data_description.xml"))
-    num_of_category = defaultdict(int)
 
+    all_descriptions = []
     for image in image_data:
-        if image["categories"] is not None:
-            if type(image["categories"]["category"]) is str:
-                num_of_category[image["categories"]["category"]] += 1
+        if image["description"] is not None:
+            all_descriptions.append(image["description"])
 
-            else:
-                for category in image["categories"]["category"]:
-                    num_of_category[category] += 1
+    vectoriser = TfidfVectorizer()
+    transformed = vectoriser.fit_transform(all_descriptions)
 
-    for category in sorted(num_of_category.keys(), key=lambda x: -num_of_category[x]):
-        print(category, num_of_category[category])
+    NUM_CLUSTERS = 6
+    clustering_model = KMeans(n_clusters=NUM_CLUSTERS, algorithm="auto", max_iter=1000, n_init=500)
+    clustering_model.fit(transformed)
+
+    # Reset clusters
+    cluster_dir = os.path.join(os.getcwd(), "data", "clusters")
+    if os.path.exists(cluster_dir):
+        shutil.rmtree(cluster_dir)
+
+    os.mkdir(cluster_dir)
+
+    num_in = [0 for _ in range(NUM_CLUSTERS)]
+    for image in image_data:
+        if image["description"] is not None:
+
+            image_name = image["mediaurl"].replace("/images/", "")
+            original_path = os.path.join(os.getcwd(), "data", "original_images", image_name)
+            if not os.path.exists(original_path):
+                continue
+
+            cluster = clustering_model.predict(vectoriser.transform([image["description"]]))[0]
+            num_in[cluster] += 1
+
+            if num_in[cluster] == 1:
+                os.mkdir(os.path.join(cluster_dir, str(cluster)))
+
+            shutil.copyfile(
+                original_path,
+                os.path.join(cluster_dir, str(cluster), image_name)
+            )
+
+
+
+

@@ -71,7 +71,6 @@ function init() {
     let fontSignGeometries = []
     let fontSigns = []
     let signTexts = ["Buildings", "Children", "Events", "Portraits", "Scenery", "Society"];
-    let roomsDeep = [69, 38, 58, 91, 56, 94];
     const fontMaterial = new THREE.MeshBasicMaterial({color: 0xDDDDDD})
     for(var i = 0; i < 6; i++){
       fontSignGeometries.push(new TextGeometry(signTexts[i], {
@@ -89,6 +88,7 @@ function init() {
   })
   loader.load("resources/models/Room.glb", function (gltf) {
     var rooms = []
+    let roomsDeep = [69, 38, 58, 91, 56, 94];
     for(var i = 0; i < 6; i++){
       for (let j = 0; j < roomsDeep[i]; ++j) {
         rooms.push(gltf.scene.clone());

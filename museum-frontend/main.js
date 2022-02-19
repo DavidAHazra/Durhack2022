@@ -1,6 +1,7 @@
 import './style.css'
 import * as THREE from "three"
 import { PointerLockControls } from "three/examples/jsm/controls/PointerLockControls"
+import { HDRCubeTextureLoader } from "three/examples/jsm/loaders/HDRCubeTextureLoader"
 
 const renderer = new THREE.WebGLRenderer({
 })
@@ -17,6 +18,7 @@ let canJump = false;
 const velocity = new THREE.Vector3();
 const direction = new THREE.Vector3();
 const clock = new THREE.Clock();
+let skybox;
 function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
@@ -26,6 +28,11 @@ function init() {
   onWindowResize();
   window.addEventListener("resize", onWindowResize);
   scene.fog = new THREE.Fog(0xffffff, 0, 750)
+  const skyboxGeometry = new THREE.SphereGeometry( 500, 60, 40 );
+  skyboxGeometry.scale( - 1, 1, 1 );
+  var skyboxMaterial = new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("resources/SkyHDR.jpg")})
+  skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial)
+  scene.add(skybox)
   const testfloorgeometry = new THREE.PlaneGeometry(100, 100);
   testfloorgeometry.rotateX(-Math.PI/2)
   const floormaterial = new THREE.MeshBasicMaterial({color: 0x222222, side: THREE.DoubleSide})
@@ -45,7 +52,6 @@ function init() {
     instructions.style.display = "";
   })
   scene.add(controls.getObject())
-  
   const onKeyDown = function ( event ) {
     switch ( event.code ) {
       case 'ArrowUp':
@@ -110,6 +116,9 @@ function animate(){
     controls.moveRight(-velocity.x * delta);
     controls.moveForward(-velocity.z * delta);
   }
+  skybox.position.x = camera.position.x;
+  skybox.position.z = camera.position.z;
+  skybox.rotateY(0.02 * delta)
   renderer.render(scene, camera)
 }
 init();

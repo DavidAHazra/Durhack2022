@@ -4,7 +4,21 @@ import os
 from torchvision.transforms import Resize, Normalize, ConvertImageDtype, Grayscale
 
 import joblib
- 
+
+
+def transform_image(image_path):
+    image_data = read_image(image_path)
+    image_data = ConvertImageDtype(torch.float)(image_data)
+    image_data = Grayscale()(image_data)
+    image_data = Normalize(mean=[0.5], std=[0.5])(image_data)
+    # Scale everything to 460x460
+    image_data = Resize((115, 115))(image_data)
+    # Flatten
+    # image_data = image_data.squeeze()
+    image_data = image_data.flatten()
+
+    return image_data
+
 
 class ImageDataset(torch.utils.data.Dataset):
     def __init__(self, image_dir):
@@ -16,19 +30,7 @@ class ImageDataset(torch.utils.data.Dataset):
         return len(self.image_paths)
 
     def __getitem__(self, index):
-        # Load image
-        image_data = read_image(self.image_paths[index])
-        image_data = ConvertImageDtype(torch.float)(image_data)
-        image_data = Grayscale()(image_data)
-        image_data = Normalize(mean=[0.5],std=[0.5])(image_data)
-        # Scale everything to 460x460
-        image_data = Resize((115, 115))(image_data)
-        # Flatten
-        #image_data = image_data.squeeze()
-        image_data = image_data.flatten()
-
-        return image_data
-
+        return transform_image(self.image_paths[index])
 
 class Autoencoder(torch.nn.Module):
     def __init__(self):

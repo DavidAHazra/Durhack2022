@@ -32,7 +32,6 @@ function init() {
 
   let roomsDeep = [69, 38, 58, 91, 56, 94];
 
-
   window.addEventListener("resize", onWindowResize);
   scene.fog = new THREE.Fog(0xffffff, 0, 60)
   const skyboxGeometry = new THREE.SphereGeometry( 79, 60, 40 );

@@ -22,6 +22,7 @@ const clock = new THREE.Clock();
 const loader = new GLTFLoader();
 const fontLoader = new FontLoader();
 let skybox;
+const playerLight = new THREE.PointLight(0xffffff, 0.5)
 function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
@@ -44,6 +45,8 @@ function init() {
   scene.add(new THREE.AmbientLight(0xffffff, 0.5))
   const sun = new THREE.PointLight(0xffffff, 0.5)
   sun.position.y = 4
+  playerLight.position.y = 2;
+  scene.add(playerLight)
   console.log(sun.rotation)
   scene.add(sun)
   loader.load("resources/models/EntranceHall.glb", function (gltf) {
@@ -205,6 +208,8 @@ function animate(){
   }
   skybox.position.x = camera.position.x;
   skybox.position.z = camera.position.z;
+  playerLight.position.x = camera.position.x;
+  playerLight.position.z = camera.position.z;
   skybox.rotateY(0.02 * delta)
   renderer.render(scene, camera)
 }

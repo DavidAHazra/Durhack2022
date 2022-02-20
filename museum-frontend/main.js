@@ -5,7 +5,7 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader'
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry'
 let cat_map
-function load_painting(i, depth, j) {
+function load_painting(i, depth, j, is_left) {
   let paining_loader = new THREE.TextureLoader();
   let names = ["Buildings", "Children", "Events", "Portraits", "Scenery", "Society"]; 
   let url = cat_map[names[i]][depth*16+j]
@@ -21,7 +21,14 @@ function load_painting(i, depth, j) {
     let paint1 = new THREE.Mesh(geo, material);
     paint1.rotateY(Math.PI/2 + i * Math.PI/3)
     paint1.translateZ(-20.16026 - 3.1 * j + (-34.87165*depth))
-    paint1.translateX(-10.435823)
+
+    if (is_left) {
+      paint1.translateX(-10.435823)
+
+    } else {
+      paint1.translateX(10.435823)
+    }
+
     paint1.translateZ(-0.45)
     paint1.position.y = 2
     scene.add(paint1);
@@ -139,12 +146,7 @@ function init() {
       for (var j = 0; j < 8; j++){
         load_painting(i, depth, j);
         
-        let paint2 = new THREE.Mesh(new THREE.BoxGeometry(), new THREE.MeshBasicMaterial());
-        paint2.rotateY(Math.PI/2 + i * Math.PI/3)
-        paint2.translateZ(-20.16026 - 3.1 * j + (-34.87165*depth))
-        paint2.translateX(10.435823)
-        paint2.position.y = 2
-        scene.add(paint2)
+        load_painting(i, depth, j, false);
       }
     }
   }

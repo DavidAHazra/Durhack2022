@@ -13,5 +13,5 @@ def get_image_data(file_path):
 
 if __name__ == '__main__':
     image_data = get_image_data(os.path.join(os.getcwd(), "data", "data_description.xml"))
-    with open(os.path.join(os.getcwd(), "data", "data_desc.json"), 'w') as wr:
+    with open(os.path.join(os.getcwd(), "data", "categories", "data_desc.json"), 'w') as wr:
         wr.write(json.dumps(image_data))

@@ -8,6 +8,7 @@ let cat_map
 let metadata = new Map()
 const infoElement = document.getElementById("info")
 const descElement = document.getElementById("description")
+let prev_url = "";
 function updateInfo(newInfoText, newDescText){
   if (newInfoText != infoElement.innerText){
     infoElement.innerText = newInfoText
@@ -273,7 +274,14 @@ function animate(){
     var cameraIntersects = cameraRaycaster.intersectObjects(scene.children)
     if (cameraIntersects.length > 0){
       if(cameraIntersects[0]["object"]["material"]["map"]["image"]["src"]){
-        var url_str = cameraIntersects[0]["object"]["material"]["map"]["image"]["src"]
+        var url_str = cameraIntersects[0]["object"]["material"]["map"]["image"]["src"];
+
+        if (url_str == prev_url) {
+          break;
+        }
+
+        prev_url = url_str;
+
         url_str = url_str.split('/')
         url_str = url_str[url_str.length-1]
         url_str = '/images/'+url_str

@@ -60,7 +60,7 @@ function init() {
         corridorLights.push(new THREE.PointLight(0xffffff, 0.1))
         corridorLights[corridorLights.length - 1].translateZ(-5)
         corridorLights[corridorLights.length - 1].position.y = 3
-        corridorObjects[corridorLights.length - 1].add(corridorLights[corridorLights.length - 1])
+        //corridorObjects[corridorLights.length - 1].add(corridorLights[corridorLights.length - 1])
         corridorObjects[corridorLights.length - 1].scale.x = 1.01
         corridorObjects[corridorLights.length - 1].scale.y = 1.01
         corridorObjects[corridorLights.length - 1].rotateY(Math.PI/2 + i * Math.PI/3)

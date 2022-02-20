@@ -29,6 +29,10 @@ function onWindowResize() {
 }
 function init() {
   onWindowResize();
+
+  let roomsDeep = [69, 38, 58, 91, 56, 94];
+
+
   window.addEventListener("resize", onWindowResize);
   scene.fog = new THREE.Fog(0xffffff, 0, 60)
   const skyboxGeometry = new THREE.SphereGeometry( 79, 60, 40 );
@@ -51,16 +55,19 @@ function init() {
     var corridorObjects = []
     var corridorLights = []
     for(var i = 0; i < 6; i++){
-      corridorObjects.push(gltf.scene.clone())
-      corridorLights.push(new THREE.PointLight(0xffffff, 0.1))
-      corridorLights[i].translateZ(-5)
-      corridorLights[i].position.y = 3
-      corridorObjects[i].add(corridorLights[i])
-      corridorObjects[i].scale.x = 1.01
-      corridorObjects[i].scale.y = 1.01
-      corridorObjects[i].rotateY(Math.PI/2 + i * Math.PI/3)
-      corridorObjects[i].translateZ(-8.66026)
-      scene.add(corridorObjects[i])
+      for (let j = 0; j < roomsDeep[i]; ++j) {
+        corridorObjects.push(gltf.scene.clone())
+        corridorLights.push(new THREE.PointLight(0xffffff, 0.1))
+        corridorLights[corridorLights.length - 1].translateZ(-5)
+        corridorLights[corridorLights.length - 1].position.y = 3
+        corridorObjects[corridorLights.length - 1].add(corridorLights[corridorLights.length - 1])
+        corridorObjects[corridorLights.length - 1].scale.x = 1.01
+        corridorObjects[corridorLights.length - 1].scale.y = 1.01
+        corridorObjects[corridorLights.length - 1].rotateY(Math.PI/2 + i * Math.PI/3)
+        corridorObjects[corridorLights.length - 1].translateZ(-8.66026)
+        corridorObjects[corridorLights.length - 1].translateZ((-24.87165-10) * j)
+        scene.add(corridorObjects[corridorLights.length - 1])  
+      }
     }
     // const corridorObject = gltf.scene;
     // corridorObject.rotateY(Math.PI/2)
@@ -88,7 +95,6 @@ function init() {
   })
   loader.load("resources/models/Room.glb", function (gltf) {
     var rooms = []
-    let roomsDeep = [69, 38, 58, 91, 56, 94];
     for(var i = 0; i < 6; i++){
       for (let j = 0; j < roomsDeep[i]; ++j) {
         rooms.push(gltf.scene.clone());

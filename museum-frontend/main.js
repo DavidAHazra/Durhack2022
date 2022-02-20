@@ -6,6 +6,12 @@ import { FontLoader } from 'three/examples/jsm/loaders/FontLoader'
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry'
 let cat_map
 let metadata
+const infoElement = document.getElementById("info")
+function updateInfo(newInfoText){
+  if (newInfoText != infoElement.innerText){
+    infoElement.innerText = newInfoText
+  }
+}
 function load_painting(i, depth, j, is_left) {
   let paining_loader = new THREE.TextureLoader();
   let names = ["Buildings", "Children", "Events", "Portraits", "Scenery", "Society"]; 

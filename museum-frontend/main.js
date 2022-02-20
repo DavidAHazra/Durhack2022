@@ -86,6 +86,7 @@ function onWindowResize() {
   camera.updateProjectionMatrix();
   renderer.setSize( window.innerWidth, window.innerHeight );
 }
+const cameraRaycaster = new THREE.Raycaster(new THREE.Vector3(0,0,0), new THREE.Vector3(0,1,0), 0, 5);
 function init() {
   onWindowResize();
 
@@ -247,6 +248,11 @@ function animate(){
   const delta = clock.getDelta();
   const time = clock.getElapsedTime();
   if (controls.isLocked == true){
+    var cameraPosition = new THREE.Vector3()
+    var cameraDirection = new THREE.Vector3()
+    camera.getWorldPosition(cameraPosition)
+    camera.getWorldDirection(cameraDirection)
+    cameraRaycaster.set(cameraPosition, cameraDirection)
     velocity.x -= velocity.x * 10.0 * delta;
     velocity.z -= velocity.z * 10.0 * delta;
     direction.z = Number(moveForward) - Number(moveBackward)
@@ -256,6 +262,10 @@ function animate(){
     if ( moveLeft || moveRight ) velocity.x -= direction.x * 100.0 * delta;
     controls.moveRight(-velocity.x * delta);
     controls.moveForward(-velocity.z * delta);
+    var cameraIntersects = cameraRaycaster.intersectObjects(scene.children)
+    if (cameraIntersects.length > 0){
+      console.log(cameraIntersects[0]["object"]["material"]["map"]["image"]["src"])
+    }
   }
   skybox.position.x = camera.position.x;
   skybox.position.z = camera.position.z;

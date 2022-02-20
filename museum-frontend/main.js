@@ -12,7 +12,8 @@ function load_painting(i, depth, j) {
     // do something with the texture
     var material = new THREE.MeshBasicMaterial( {
         map: texture
-      } );
+    });
+
     var aspect = texture.image.width/texture.image.height
     var geo = new THREE.BoxGeometry(1,texture.image.height*0.005,texture.image.width*0.005)
 
@@ -128,6 +129,7 @@ function init() {
       }
     }
   })
+  
   let paintings = []
   for (var i = 0; i < 6; i++){
     for(var depth = 0; depth < roomsDeep[i];depth++){

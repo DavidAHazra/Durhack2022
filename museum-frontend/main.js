@@ -92,10 +92,10 @@ function init() {
     for(var i = 0; i < 6; i++){
       for (let j = 0; j < roomsDeep[i]; ++j) {
         rooms.push(gltf.scene.clone());
-        rooms[i].rotateY(Math.PI/2 + i * Math.PI/3)
-        rooms[i].translateZ(-8.66026-10)
-        rooms[i].translateZ(-10 * j);
-        scene.add(rooms[i])  
+        rooms[rooms.length - 1].rotateY(Math.PI/2 + i * Math.PI/3)
+        rooms[rooms.length - 1].translateZ(-8.66026-10)
+        rooms[rooms.length - 1].translateZ(-10 * j);
+        scene.add(rooms[rooms.length - 1])  
       }
     }
   })

@@ -5,5 +5,6 @@
 
 #To Run
 clone the repo
+cd museum-frontend
 npm install
 npm run dev

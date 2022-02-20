@@ -108,12 +108,10 @@ function init() {
     }
   })
   let paintings = []
+  let paining_loader = new THREE.TextureLoader(); 
   for (var i = 0; i < 6; i++){
     for(var depth = 0; depth < roomsDeep[i];depth++){
       for (var j = 0; j < 8; j++){
-
-
-        var paining_loader = new THREE.TextureLoader();
 
         paining_loader.load("resources/blac0002_tcm4-14528.jpg", (texture) => {
           // do something with the texture

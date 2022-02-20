@@ -264,7 +264,14 @@ function animate(){
     controls.moveForward(-velocity.z * delta);
     var cameraIntersects = cameraRaycaster.intersectObjects(scene.children)
     if (cameraIntersects.length > 0){
-      console.log(cameraIntersects[0]["object"]["material"]["map"]["image"]["src"])
+      if(cameraIntersects[0]["object"]["material"]["map"]["image"]["src"]){
+        var url_str = cameraIntersects[0]["object"]["material"]["map"]["image"]["src"]
+        url_str = url_str.split('/')
+        url_str = url_str[url_str.length-1]
+        url_str = '/images/'+url_str
+        console.log(url_str)
+        console.log(metadata[url_str])
+      }
     }
   }
   skybox.position.x = camera.position.x;

@@ -4,23 +4,25 @@ import { PointerLockControls } from "three/examples/jsm/controls/PointerLockCont
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader'
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry'
-
+let cat_map
 function load_painting(i, depth, j) {
-  let paining_loader = new THREE.TextureLoader(); 
-
-  paining_loader.load("resources/blac0002_tcm4-14528.jpg", (texture) => {
+  let paining_loader = new THREE.TextureLoader();
+  let names = ["Buildings", "Children", "Events", "Portraits", "Scenery", "Society"]; 
+  let url = cat_map[names[i]][depth*16+j]
+  paining_loader.load("resources/categories/" + names[i]+'/'+url, (texture) => {
     // do something with the texture
     var material = new THREE.MeshBasicMaterial( {
         map: texture
     });
 
     var aspect = texture.image.width/texture.image.height
-    var geo = new THREE.BoxGeometry(1,texture.image.height*0.005,texture.image.width*0.005)
+    var geo = new THREE.BoxGeometry(0.1,texture.image.height*0.005,texture.image.width*0.005)
 
     let paint1 = new THREE.Mesh(geo, material);
     paint1.rotateY(Math.PI/2 + i * Math.PI/3)
     paint1.translateZ(-20.16026 - 3.1 * j + (-34.87165*depth))
     paint1.translateX(-10.435823)
+    paint1.translateZ(-0.45)
     paint1.position.y = 2
     scene.add(paint1);
   });
@@ -54,6 +56,7 @@ function init() {
   onWindowResize();
 
   let roomsDeep = [69, 38, 58, 91, 56, 94];
+  let names = ["Buildings", "Children", "Events", "Portraits", "Scenery", "Society"];
 
   window.addEventListener("resize", onWindowResize);
   scene.fog = new THREE.Fog(0xffffff, 0, 60)
@@ -145,6 +148,7 @@ function init() {
       }
     }
   }
+  console.log(scene)
   const blocker = document.getElementById("blocker");
   const instructions = document.getElementById("instructions");
   instructions.addEventListener("click", function () {
@@ -236,5 +240,6 @@ fetch("resources/categories/cat_maps.json")
 .then(data => data.json())
 .then(json_data => {
   console.log(json_data);
+  cat_map=json_data
   init();
 });

@@ -112,44 +112,31 @@ function init() {
     for(var depth = 0; depth < roomsDeep[i];depth++){
       for (var j = 0; j < 8; j++){
 
-        // instantiate a loader
-        var paining_loader = new THREE.TextureLoader();
-        // load a resource
-        paining_loader.load(
-            // resource URL
-            "resources/blac0002_tcm4-14528.jpg",
-            // Function when resource is loaded
-            function ( texture ) {
-                // do something with the texture
-                var material = new THREE.MeshBasicMaterial( {
-                    map: texture
-                 } );
-                var aspect = texture.image.width/texture.image.height
-                var geo = new THREE.BoxGeometry(10,10, 10)
-                paintings.push(new THREE.Mesh(geo, material))
-                //paintings.push(new THREE.Mesh(new THREE.BoxGeometry(), new THREE.MeshBasicMaterial()))
-                paintings[paintings.length - 1].rotateY(Math.PI/2 + i * Math.PI/3)
-                paintings[paintings.length - 1].translateZ(-20.16026 - 3.1 * j + (-34.87165*depth))
-                paintings[paintings.length - 1].translateX(-10.435823)
-                paintings[paintings.length - 1].position.y = 2
-                scene.add(paintings[paintings.length - 1]);
-            },
-            // Function called when download progresses
-            function ( xhr ) {
-                console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
-            },
-            // Function called when download errors
-            function ( xhr ) {
-                console.log( 'An error happened' );
-            });
-        
 
-        paintings.push(new THREE.Mesh(new THREE.BoxGeometry(), new THREE.MeshBasicMaterial()))
-        paintings[paintings.length - 1].rotateY(Math.PI/2 + i * Math.PI/3)
-        paintings[paintings.length - 1].translateZ(-20.16026 - 3.1 * j + (-34.87165*depth))
-        paintings[paintings.length - 1].translateX(10.435823)
-        paintings[paintings.length - 1].position.y = 2
-        scene.add(paintings[paintings.length - 1])
+        var paining_loader = new THREE.TextureLoader();
+
+        paining_loader.load("resources/blac0002_tcm4-14528.jpg", (texture) => {
+          // do something with the texture
+          var material = new THREE.MeshBasicMaterial( {
+              map: texture
+            } );
+          var aspect = texture.image.width/texture.image.height
+          var geo = new THREE.BoxGeometry(10,10, 10)
+          paintings.push(new THREE.Mesh(geo, material))
+          //paintings.push(new THREE.Mesh(new THREE.BoxGeometry(), new THREE.MeshBasicMaterial()))
+          paintings[paintings.length - 1].rotateY(Math.PI/2 + i * Math.PI/3)
+          paintings[paintings.length - 1].translateZ(-20.16026 - 3.1 * j + (-34.87165*depth))
+          paintings[paintings.length - 1].translateX(-10.435823)
+          paintings[paintings.length - 1].position.y = 2
+          scene.add(paintings[paintings.length - 1]);
+        });
+        
+        let paint2 = new THREE.Mesh(new THREE.BoxGeometry(), new THREE.MeshBasicMaterial());
+        paint2.rotateY(Math.PI/2 + i * Math.PI/3)
+        paint2.translateZ(-20.16026 - 3.1 * j + (-34.87165*depth))
+        paint2.translateX(10.435823)
+        paint2.position.y = 2
+        scene.add(paint2)
       }
     }
   }

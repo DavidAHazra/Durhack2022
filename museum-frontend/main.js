@@ -40,7 +40,7 @@ const renderer = new THREE.WebGLRenderer({
 })
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xffffff)
-const camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.1, 80);
+const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 80);
 camera.position.y = 1.6;
 const controls = new PointerLockControls(camera, document.body)
 let moveForward = false;

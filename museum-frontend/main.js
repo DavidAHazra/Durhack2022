@@ -122,13 +122,14 @@ function init() {
             } );
           var aspect = texture.image.width/texture.image.height
           var geo = new THREE.BoxGeometry(10,10, 10)
-          paintings.push(new THREE.Mesh(geo, material))
+          
+          let paint1 = new THREE.Mesh(geo, material);
           //paintings.push(new THREE.Mesh(new THREE.BoxGeometry(), new THREE.MeshBasicMaterial()))
-          paintings[paintings.length - 1].rotateY(Math.PI/2 + i * Math.PI/3)
-          paintings[paintings.length - 1].translateZ(-20.16026 - 3.1 * j + (-34.87165*depth))
-          paintings[paintings.length - 1].translateX(-10.435823)
-          paintings[paintings.length - 1].position.y = 2
-          scene.add(paintings[paintings.length - 1]);
+          paint1.rotateY(Math.PI/2 + i * Math.PI/3)
+          paint1.translateZ(-20.16026 - 3.1 * j + (-34.87165*depth))
+          paint1.translateX(-10.435823)
+          paint1.position.y = 2
+          scene.add(paint1);
         });
         
         let paint2 = new THREE.Mesh(new THREE.BoxGeometry(), new THREE.MeshBasicMaterial());

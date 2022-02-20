@@ -94,7 +94,7 @@ function init() {
         rooms.push(gltf.scene.clone());
         rooms[rooms.length - 1].rotateY(Math.PI/2 + i * Math.PI/3)
         rooms[rooms.length - 1].translateZ(-8.66026-10)
-        rooms[rooms.length - 1].translateZ(-10 * j);
+        rooms[rooms.length - 1].translateZ((-8.66026-10) * j);
         scene.add(rooms[rooms.length - 1])  
       }
     }

@@ -6,6 +6,8 @@ import { FontLoader } from 'three/examples/jsm/loaders/FontLoader'
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry'
 
 function load_painting(i, depth, j) {
+  let paining_loader = new THREE.TextureLoader(); 
+
   paining_loader.load("resources/blac0002_tcm4-14528.jpg", (texture) => {
     // do something with the texture
     var material = new THREE.MeshBasicMaterial( {
@@ -128,7 +130,6 @@ function init() {
     }
   })
   let paintings = []
-  let paining_loader = new THREE.TextureLoader(); 
   for (var i = 0; i < 6; i++){
     for(var depth = 0; depth < roomsDeep[i];depth++){
       for (var j = 0; j < 8; j++){

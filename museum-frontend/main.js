@@ -31,8 +31,8 @@ function init() {
   onWindowResize();
   window.addEventListener("resize", onWindowResize);
   scene.fog = new THREE.Fog(0xffffff, 0, 60)
-  const skyboxGeometry = new THREE.SphereGeometry( 500, 60, 40 );
-  skyboxGeometry.scale( - 1, 1, 1 );
+  const skyboxGeometry = new THREE.SphereGeometry( 79, 60, 40 );
+  skyboxGeometry.scale( - 1, 0.5, 1 );
   var skyboxMaterial = new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("resources/SkyHDR.jpg", function (hdr){
     scene.environment = hdr
   })})

@@ -5,6 +5,7 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader'
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry'
 let cat_map
+let metadata
 function load_painting(i, depth, j, is_left) {
   let paining_loader = new THREE.TextureLoader();
   let names = ["Buildings", "Children", "Events", "Portraits", "Scenery", "Society"]; 
@@ -249,6 +250,13 @@ fetch("resources/categories/cat_maps.json")
 .then(data => data.json())
 .then(json_data => {
   console.log(json_data);
-  cat_map=json_data
-  init();
+  fetch("resources/categories/data_desc.json")
+  .then(data => data.json())
+  .then(json_data_2 => {
+      console.log(json_data_2)
+      cat_map=json_data
+      metadata=json_data_2
+
+    init();
+  });
 });

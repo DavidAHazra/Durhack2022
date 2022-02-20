@@ -59,13 +59,13 @@ function init() {
         corridorLights.push(new THREE.PointLight(0xffffff, 0.1))
         corridorLights[corridorLights.length - 1].translateZ(-5)
         corridorLights[corridorLights.length - 1].position.y = 3
-        corridorObjects[corridorLights.length - 1].add(corridorLights[corridorLights.length - 1])
+        //corridorObjects[corridorLights.length - 1].add(corridorLights[corridorLights.length - 1])
         corridorObjects[corridorLights.length - 1].scale.x = 1.01
         corridorObjects[corridorLights.length - 1].scale.y = 1.01
         corridorObjects[corridorLights.length - 1].rotateY(Math.PI/2 + i * Math.PI/3)
         corridorObjects[corridorLights.length - 1].translateZ(-8.66026)
         corridorObjects[corridorLights.length - 1].translateZ((-24.87165-10) * j)
-        scene.add(corridorObjects[corridorLights.length - 1])  
+        //scene.add(corridorObjects[corridorLights.length - 1])  
       }
     }
     // const corridorObject = gltf.scene;
@@ -107,19 +107,21 @@ function init() {
   let paintings = []
   for (var i = 0; i < 6; i++){
     paintings.push([])
-    for (var j = 0; j < 8; j++){
-      paintings[i].push(new THREE.Mesh(new THREE.BoxGeometry(), new THREE.MeshBasicMaterial()))
-      paintings[i][2*j].rotateY(Math.PI/2 + i * Math.PI/3)
-      paintings[i][2*j].translateZ(-20.16026 - 3.1 * j)
-      paintings[i][2*j].translateX(-10.435823)
-      paintings[i][2*j].position.y = 2
-      scene.add(paintings[i][2*j])
-      paintings[i].push(new THREE.Mesh(new THREE.BoxGeometry(), new THREE.MeshBasicMaterial()))
-      paintings[i][2*j+1].rotateY(Math.PI/2 + i * Math.PI/3)
-      paintings[i][2*j+1].translateZ(-20.16026 - 3.1 * j)
-      paintings[i][2*j+1].translateX(10.435823)
-      paintings[i][2*j+1].position.y = 2
-      scene.add(paintings[i][2*j+1])
+    for(var depth = 0; depth < roomsDeep[i];depth++){
+      for (var j = 0; j < 8; j++){
+        paintings[i].push(new THREE.Mesh(new THREE.BoxGeometry(), new THREE.MeshBasicMaterial()))
+        paintings[i][2*j].rotateY(Math.PI/2 + i * Math.PI/3)
+        paintings[i][2*j].translateZ(-20.16026 - 3.1 * j + (-34.87165*depth))
+        paintings[i][2*j].translateX(-10.435823)
+        paintings[i][2*j].position.y = 2
+        scene.add(paintings[i][2*j])
+        paintings[i].push(new THREE.Mesh(new THREE.BoxGeometry(), new THREE.MeshBasicMaterial()))
+        paintings[i][2*j+1].rotateY(Math.PI/2 + i * Math.PI/3)
+        paintings[i][2*j+1].translateZ(-20.16026 - 3.1 * j + (-34.87165*depth))
+        paintings[i][2*j+1].translateX(10.435823)
+        paintings[i][2*j+1].position.y = 2
+        scene.add(paintings[i][2*j+1])
+      }
     }
   }
   const blocker = document.getElementById("blocker");

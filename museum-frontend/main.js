@@ -229,4 +229,5 @@ function animate(){
   skybox.rotateY(0.02 * delta)
   renderer.render(scene, camera)
 }
+
 init();

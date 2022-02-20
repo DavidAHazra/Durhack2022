@@ -230,7 +230,7 @@ function animate(){
   renderer.render(scene, camera)
 }
 
-fetch("resources/cat_maps.json")
+fetch("resources/categories/cat_maps.json")
 .then(data => data.json())
 .then(json_data => {
   console.log(json_data);

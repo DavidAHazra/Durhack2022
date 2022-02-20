@@ -7,9 +7,11 @@ import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry'
 let cat_map
 let metadata = Object
 const infoElement = document.getElementById("info")
-function updateInfo(newInfoText){
+const descElement = document.getElementById("description")
+function updateInfo(newInfoText, newDescText){
   if (newInfoText != infoElement.innerText){
     infoElement.innerText = newInfoText
+    descElement.innerText = newDescText
   }
 }
 function load_painting(i, depth, j, is_left) {
@@ -277,8 +279,10 @@ function animate(){
         url_str = '/images/'+url_str
         console.log(url_str)
         let meta_image = metadata[url_str]
-        let description = meta_image['title'] + '\n'+ meta_image['startdate'] + '\n'+meta_image['description']
-        updateInfo(description)
+
+        let title = meta_image['title'] + '\n'+ meta_image['startdate'] 
+        let description = meta_image['description']
+        updateInfo(title, description)
       }
       else
         updateInfo('')

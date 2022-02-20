@@ -5,6 +5,26 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader'
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry'
 
+function load_painting(i, depth, j) {
+  paining_loader.load("resources/blac0002_tcm4-14528.jpg", (texture) => {
+    // do something with the texture
+    var material = new THREE.MeshBasicMaterial( {
+        map: texture
+      } );
+    var aspect = texture.image.width/texture.image.height
+    var geo = new THREE.BoxGeometry(10,10, 10)
+
+    //let paint1 = new THREE.Mesh(geo, material);
+    let paint1 = new THREE.Mesh(new THREE.BoxGeometry(), new THREE.MeshBasicMaterial());
+    paint1.rotateY(Math.PI/2 + i * Math.PI/3)
+    paint1.translateZ(-20.16026 - 3.1 * j + (-34.87165*depth))
+    paint1.translateX(-10.435823)
+    paint1.position.y = 2
+    scene.add(paint1);
+  });
+}
+
+
 const renderer = new THREE.WebGLRenderer({
 })
 const scene = new THREE.Scene();
@@ -112,23 +132,7 @@ function init() {
   for (var i = 0; i < 6; i++){
     for(var depth = 0; depth < roomsDeep[i];depth++){
       for (var j = 0; j < 8; j++){
-
-        paining_loader.load("resources/blac0002_tcm4-14528.jpg", (texture) => {
-          // do something with the texture
-          var material = new THREE.MeshBasicMaterial( {
-              map: texture
-            } );
-          var aspect = texture.image.width/texture.image.height
-          var geo = new THREE.BoxGeometry(10,10, 10)
-
-          //let paint1 = new THREE.Mesh(geo, material);
-          let paint1 = new THREE.Mesh(new THREE.BoxGeometry(), new THREE.MeshBasicMaterial());
-          paint1.rotateY(Math.PI/2 + i * Math.PI/3)
-          paint1.translateZ(-20.16026 - 3.1 * j + (-34.87165*depth))
-          paint1.translateX(-10.435823)
-          paint1.position.y = 2
-          scene.add(paint1);
-        });
+        load_painting(i, depth, j);
         
         let paint2 = new THREE.Mesh(new THREE.BoxGeometry(), new THREE.MeshBasicMaterial());
         paint2.rotateY(Math.PI/2 + i * Math.PI/3)

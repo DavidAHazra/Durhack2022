@@ -14,7 +14,7 @@ function load_painting(i, depth, j) {
         map: texture
       } );
     var aspect = texture.image.width/texture.image.height
-    var geo = new THREE.BoxGeometry(10,10, 10)
+    var geo = new THREE.BoxGeometry(1,texture.image.height*0.005,texture.image.width*0.005)
 
     let paint1 = new THREE.Mesh(geo, material);
     paint1.rotateY(Math.PI/2 + i * Math.PI/3)

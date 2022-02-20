@@ -1,3 +1,9 @@
-Hello World
+##Welcome to our DurHack2022 Project
 
-David Sucks Phat Dick
+
+#Durham: A Colourful History
+
+#To Run
+clone the repo
+npm install
+npm run dev

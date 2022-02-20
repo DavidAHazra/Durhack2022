@@ -5,7 +5,7 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader'
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry'
 let cat_map
-let metadata
+let metadata = Object
 const infoElement = document.getElementById("info")
 function updateInfo(newInfoText){
   if (newInfoText != infoElement.innerText){
@@ -276,8 +276,13 @@ function animate(){
         url_str = url_str[url_str.length-1]
         url_str = '/images/'+url_str
         console.log(url_str)
-        console.log(metadata[url_str])
+        let meta_image = metadata[url_str]
+        let description = meta_image['title'] + '\n'+ meta_image['startdate'] + '\n'+meta_image['description']
+        updateInfo(description)
       }
+      else
+        updateInfo('')
+
     }
   }
   skybox.position.x = camera.position.x;
@@ -297,7 +302,10 @@ fetch("resources/categories/cat_maps.json")
   .then(json_data_2 => {
       console.log(json_data_2)
       cat_map=json_data
-      metadata=json_data_2
+      for(var x = 0; x<json_data_2.length; x++){
+        metadata[json_data_2[x]['mediaurl']] = json_data_2[x]
+      }
+      console.log(metadata)
 
     init();
   });

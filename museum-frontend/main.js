@@ -8,7 +8,14 @@ let cat_map
 function load_painting(i, depth, j, is_left) {
   let paining_loader = new THREE.TextureLoader();
   let names = ["Buildings", "Children", "Events", "Portraits", "Scenery", "Society"]; 
-  let url = cat_map[names[i]][depth*16+j]
+  let url
+  if (is_left) {
+  url = cat_map[names[i]][depth*16+(j*2)]
+
+  } else {
+  url = cat_map[names[i]][depth*16+(j*2)+1]
+  }
+
   paining_loader.load("resources/categories/" + names[i]+'/'+url, (texture) => {
     // do something with the texture
     var material = new THREE.MeshBasicMaterial( {
@@ -144,7 +151,7 @@ function init() {
   for (var i = 0; i < 6; i++){
     for(var depth = 0; depth < roomsDeep[i];depth++){
       for (var j = 0; j < 8; j++){
-        load_painting(i, depth, j);
+        load_painting(i, depth, j, true);
         
         load_painting(i, depth, j, false);
       }

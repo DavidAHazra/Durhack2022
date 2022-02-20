@@ -276,20 +276,19 @@ function animate(){
       if(cameraIntersects[0]["object"]["material"]["map"]["image"]["src"]){
         var url_str = cameraIntersects[0]["object"]["material"]["map"]["image"]["src"];
 
-        if (url_str == prev_url) {
-          break;
+        if (url_str != prev_url) {
+          
+          prev_url = url_str;
+  
+          url_str = url_str.split('/')
+          url_str = url_str[url_str.length-1]
+          url_str = '/images/'+url_str
+          let meta_image = metadata.get(url_str)
+  
+          let title = meta_image['title'] + '\n'+ meta_image['startdate'] 
+          let description = meta_image['description']
+          updateInfo(title, description)
         }
-
-        prev_url = url_str;
-
-        url_str = url_str.split('/')
-        url_str = url_str[url_str.length-1]
-        url_str = '/images/'+url_str
-        let meta_image = metadata.get(url_str)
-
-        let title = meta_image['title'] + '\n'+ meta_image['startdate'] 
-        let description = meta_image['description']
-        updateInfo(title, description)
       }
       else
         updateInfo('','')

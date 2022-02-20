@@ -284,7 +284,11 @@ function animate(){
         updateInfo(title, description)
       }
       else
-        updateInfo('')
+        updateInfo('','')
+
+    }
+    else{
+      updateInfo('','')
 
     }
   }

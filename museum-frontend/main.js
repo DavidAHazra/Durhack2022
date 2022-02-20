@@ -75,7 +75,7 @@ const renderer = new THREE.WebGLRenderer({
 })
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xffffff)
-const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 80);
+const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 120);
 camera.position.y = 1.6;
 const controls = new PointerLockControls(camera, document.body)
 let moveForward = false;
@@ -102,8 +102,8 @@ function init() {
   let names = ["Buildings", "Children", "Events", "Portraits", "Scenery", "Society"];
 
   window.addEventListener("resize", onWindowResize);
-  scene.fog = new THREE.Fog(0xffffff, 0, 60)
-  const skyboxGeometry = new THREE.SphereGeometry( 79, 60, 40 );
+  scene.fog = new THREE.Fog(0xffffff, 0, 100)
+  const skyboxGeometry = new THREE.SphereGeometry( 119, 60, 40 );
   skyboxGeometry.scale( - 1, 0.5, 1 );
   var skyboxMaterial = new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load("resources/SkyHDR.jpg", function (hdr){
     scene.environment = hdr

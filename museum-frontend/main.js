@@ -65,7 +65,7 @@ function init() {
         corridorObjects[corridorLights.length - 1].rotateY(Math.PI/2 + i * Math.PI/3)
         corridorObjects[corridorLights.length - 1].translateZ(-8.66026)
         corridorObjects[corridorLights.length - 1].translateZ((-24.87165-10) * j)
-        //scene.add(corridorObjects[corridorLights.length - 1])  
+        scene.add(corridorObjects[corridorLights.length - 1])  
       }
     }
     // const corridorObject = gltf.scene;

@@ -22,24 +22,43 @@ function load_painting(i, depth, j, is_left) {
     var material = new THREE.MeshBasicMaterial( {
         map: texture
     });
+    var frame_mat = new THREE.MeshStandardMaterial({color:0xd4af37})
 
     var aspect = texture.image.width/texture.image.height
     var geo = new THREE.BoxGeometry(0.1,texture.image.height*0.005,texture.image.width*0.005)
+    var frame = new THREE.BoxGeometry(0.1,texture.image.height*0.005+0.1,texture.image.width*0.005+0.1)
 
     let paint1 = new THREE.Mesh(geo, material);
+    let frame1 = new THREE.Mesh(frame, frame_mat);
+
     paint1.rotateY(Math.PI/2 + i * Math.PI/3)
     paint1.translateZ(-20.16026 - 3.1 * j + (-34.87165*depth))
 
     if (is_left) {
       paint1.translateX(-10.435823)
+      paint1.translateX(0.02)
 
     } else {
       paint1.translateX(10.435823)
+      paint1.translateX(-0.02)
+
     }
 
-    paint1.translateZ(-0.45)
     paint1.position.y = 2
     scene.add(paint1);
+
+    frame1.rotateY(Math.PI/2 + i * Math.PI/3)
+    frame1.translateZ(-20.16026 - 3.1 * j + (-34.87165*depth))
+
+    if (is_left) {
+      frame1.translateX(-10.435823)
+
+    } else {
+      frame1.translateX(10.435823)
+    }
+
+    frame1.position.y = 2
+    scene.add(frame1);
   });
 }
 
